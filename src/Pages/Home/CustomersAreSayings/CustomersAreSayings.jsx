@@ -1,12 +1,18 @@
-import React, { use } from "react";
+import React, {  useEffect, useState } from "react";
 import customericon from '../../../assets/banner/customer-top.png'
 import { Autoplay, EffectCoverflow, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import CoustomerReviewCard from "./CoustomerReviewCard";
 
 const CustomersAreSayings = ({ reviewspromisre }) => {
-  const reviews = use(reviewspromisre);
-  console.log(reviews);
+  // const reviews = use(reviewspromisre);
+  // console.log(reviews);
+  const [reviews,setreviews]=useState([]);
+  console.log(reviews)
+  useEffect(() => {
+    reviewspromisre.then((data) => setreviews(data));
+
+  }, [reviewspromisre]);
   return (
     <div>
       <div>
@@ -31,7 +37,7 @@ const CustomersAreSayings = ({ reviewspromisre }) => {
           slidesPerView={3}
           coverflowEffect={{
             rotate: 30,
-            stretch: "50%",
+            stretch: 50,
             depth: 200,
             modifier: 1,
             scale: 0.75,
