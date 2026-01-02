@@ -2,9 +2,12 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../Hooks/useAuth";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
+import axios from "axios";
 
 const Register = () => {
+  const location=useLocation();
+  console.log('location in register page',location)
   const navigate=useNavigate();
 
   const {
@@ -16,6 +19,7 @@ const Register = () => {
     setUser,
     user,
     loading,
+    updateprofie,
     seterror,
     error,
   } = useAuth();
@@ -34,13 +38,54 @@ const Register = () => {
   // hendle form register---
   const handleForm = (data) => {
     console.log(data);
+    const profileImg=data.photo[0];
+
+    // firebase auth----
     registerUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
+
+        //number-1: store the image
+        const formData=new FormData()
+        formData.append('image',profileImg)
+
+        //nember-2:sand the photo to store and get the url--
+        const image_Api_Url = `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_image_host_key
+        }`;
+
+        //number-3: axios profile image post api---
+        axios.post(image_Api_Url,formData)
+        .then(res=>{
+          // console.log('after image uploade ',res.data)
+
+          // number-4:photo url---
+          const photourl=res.data.data.url;
+          // console.log(photourl);
+
+
+          // number-5:update for object--
+          const userProfile = {
+            displayName: data.name,
+            photoURL: photourl,
+          };
+
+          //number-6: firebase update user----
+          updateprofie(userProfile)
+          .then(res=>{
+            console.log('user profile update done',res)
+          })
+          .catch(error=>{
+            console.log('profile img error',error)
+          })
+        })
+
+
+        // -----------
         setUser(result.user);
         setLoading(false)
         seterror('')
-        navigate('/')
+        navigate(location?.state || "/");
 
 
       })
@@ -48,6 +93,7 @@ const Register = () => {
         console.log(error);
         seterror(error.message);
       });
+
   };
 
   // googlebtnhendle
@@ -60,7 +106,7 @@ const Register = () => {
       setUser(result.user);
       setLoading(false);
       seterror('')
-      navigate("/");
+      navigate(location?.state || "/");
     })
     .catch(error=>{
       console.log(error)

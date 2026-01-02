@@ -1,10 +1,12 @@
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router';
+import { NavLink, useLocation, useNavigate } from 'react-router';
 import useAuth from '../../Hooks/useAuth';
 import { useForm } from 'react-hook-form';
 
 const Login = () => {
+  const location=useLocation();
+  console.log('login location',location)
     const navigate=useNavigate();
 
     const pattern =
@@ -38,7 +40,7 @@ const Login = () => {
         setUser(result.user);
         setLoading(false);
         seterror('')
-        navigate('/')
+        navigate(location?.state||'/')
         
       })
       .catch((error) => {
@@ -55,7 +57,7 @@ const Login = () => {
         setUser(result.user);
         setLoading(false);
         seterror('')
-         navigate("/");
+         navigate(location?.state || "/");
 
     })
     .catch(error=>{
@@ -82,7 +84,7 @@ const Login = () => {
               )}
 
               {/* photo */}
-              <label className="label">Photo</label>
+              {/* <label className="label">Photo</label>
 
               <input
                 type="file"
@@ -93,7 +95,7 @@ const Login = () => {
 
               {errors.photo?.type === "required" && (
                 <p className="font-bold text-red-600">photo must be required</p>
-              )}
+              )} */}
 
               {/* email */}
               <label className="label">Email</label>
@@ -172,7 +174,9 @@ const Login = () => {
             {/* ----- */}
             <p>
               Have an new Acount{" "}
-              <NavLink to={"/register"}>
+              <NavLink to={"/register"}
+              state={location.state}
+              >
                 <span className="font-bold text-green-400 underline">
                   register
                 </span>

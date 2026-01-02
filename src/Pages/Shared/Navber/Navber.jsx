@@ -4,12 +4,13 @@ import { Link, NavLink } from "react-router";
 import useAuth from "../../../Hooks/useAuth";
 
 const Navber = () => {
-  const { user, singOut } = useAuth();
+  const { user, singOut,setuser } = useAuth();
   console.log(user)
 
   // hendle log out btn--
   const hendlelogoutbtn=()=>{
     singOut()
+   
     .then()
     .catch(error=>{
       console.log(error)

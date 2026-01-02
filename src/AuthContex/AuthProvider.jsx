@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../Firebase/Firebase.init";
 
@@ -35,6 +36,7 @@ const AuthProvider = ({ children }) => {
   const singOut = () => {
     setLoading(true);
     return signOut(auth);
+    
   };
 
   // singIn with Google-
@@ -42,6 +44,11 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     return signInWithPopup(auth, provider);
   };
+
+  // update user profile--
+  const updateprofie=(profile)=>{
+    return updateProfile(auth.currentUser, profile);
+  }
    // --------------------------------------------
 
   // auth observer
@@ -62,6 +69,7 @@ const AuthProvider = ({ children }) => {
     singInWithGoogle,
     setLoading,
     setUser,
+    updateprofie,
     user,
     loading,
     seterror,

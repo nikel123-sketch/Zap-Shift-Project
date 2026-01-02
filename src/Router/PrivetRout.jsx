@@ -1,10 +1,14 @@
 import React from 'react';
 import useAuth from '../Hooks/useAuth';
-import { Navigate } from 'react-router';
+import { Navigate, useLocation } from 'react-router';
 
 const PrivetRout = ({children}) => {
     const { user, loading } = useAuth();
     console.log(user)
+
+    // location--
+    const location=useLocation();
+    console.log(location)
 
     // loading---check--
     if(loading){
@@ -18,7 +22,7 @@ const PrivetRout = ({children}) => {
 
     // user check----
     if(!user){
-        return <Navigate to={'/login'}></Navigate>
+        return <Navigate state={location.pathname} to={"/login"}></Navigate>;
     }
 
     // main return-----
