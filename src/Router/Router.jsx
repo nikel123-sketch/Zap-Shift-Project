@@ -9,6 +9,7 @@ import Coverage from "../Pages/Coverage/Coverage";
 import AuthLayout from "../AuthLayout/AuthLayout";
 import Login from "../Pages/AuthPage/Login";
 import Register from "../Pages/AuthPage/Register";
+import PrivetRout from "./PrivetRout";
 
 export const router = createBrowserRouter([
   {
@@ -38,7 +39,8 @@ export const router = createBrowserRouter([
       },
       {
         path: "BeaRider",
-        Component:BeaRider
+        // Component:BeaRider
+        element:<PrivetRout><BeaRider></BeaRider></PrivetRout>
       },
     ],
   },

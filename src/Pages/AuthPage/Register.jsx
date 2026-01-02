@@ -75,6 +75,33 @@ const Register = () => {
         <div className="card-body">
           <form onSubmit={handleSubmit(handleForm)}>
             <fieldset className="fieldset">
+              {/* name */}
+              <label className="label">Name</label>
+              <input
+                type="text"
+                className="input"
+                placeholder="Your Name"
+                {...register("name", { required: true })}
+              />
+
+              {errors.name?.type === "required" && (
+                <p className="font-bold text-red-600">name must be required</p>
+              )}
+
+              {/* photo */}
+              <label className="label">Photo</label>
+              
+              <input
+                type="file"
+                className="file-input file-input-primary"
+                placeholder="Your photo"
+                {...register("photo", { required: true })}
+              />
+
+              {errors.photo?.type === "required" && (
+                <p className="font-bold text-red-600">photo must be required</p>
+              )}
+
               {/* Email */}
               <label className="label">Email</label>
               <input
@@ -134,7 +161,7 @@ const Register = () => {
                 </p>
               )}
 
-              {error?<p className="font-bold text-red-600">{error}</p>:''}
+              {error ? <p className="font-bold text-red-600">{error}</p> : ""}
 
               {/* Forgot Password */}
               <div>

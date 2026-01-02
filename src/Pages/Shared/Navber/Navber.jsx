@@ -1,11 +1,20 @@
 import React from "react";
 import Logo from "../../../Component/Logo/Logo";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import useAuth from "../../../Hooks/useAuth";
 
 const Navber = () => {
-  const {user}=useAuth();
+  const { user, singOut } = useAuth();
   console.log(user)
+
+  // hendle log out btn--
+  const hendlelogoutbtn=()=>{
+    singOut()
+    .then()
+    .catch(error=>{
+      console.log(error)
+    })
+  }
   const links = (
     <>
       <li>
@@ -66,9 +75,19 @@ const Navber = () => {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
-        <div className="navbar-end">
-          {user?<NavLink to={'/login'}><a className="btn bg-[#caeb66]">SingOut</a></NavLink>
-          :<NavLink to={'/register'}><a className="btn bg-[#caeb66]">SingIn</a></NavLink>}
+        <div className="navbar-end gap-4">
+          {user ? (
+            <a className="btn bg-[#caeb66]" onClick={hendlelogoutbtn}>
+              Log Out
+            </a>
+          ) : (
+            <NavLink to={"/login"} className="btn bg-[#caeb66]">
+              LogIn
+            </NavLink>
+          )}
+          <Link className="btn bg-[#caeb66]" to={"/BeaRider"}>
+            Be a Rider
+          </Link>
         </div>
       </div>
     </div>
