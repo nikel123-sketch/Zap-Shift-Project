@@ -1,8 +1,11 @@
 import React from "react";
 import Logo from "../../../Component/Logo/Logo";
 import { NavLink } from "react-router";
+import useAuth from "../../../Hooks/useAuth";
 
 const Navber = () => {
+  const {user}=useAuth();
+  console.log(user)
   const links = (
     <>
       <li>
@@ -64,7 +67,8 @@ const Navber = () => {
           <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
         <div className="navbar-end">
-          <a className="btn bg-[#caeb66]">Button</a>
+          {user?<NavLink to={'/login'}><a className="btn bg-[#caeb66]">SingOut</a></NavLink>
+          :<NavLink to={'/register'}><a className="btn bg-[#caeb66]">SingIn</a></NavLink>}
         </div>
       </div>
     </div>

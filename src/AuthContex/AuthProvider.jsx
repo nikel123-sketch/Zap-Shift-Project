@@ -17,6 +17,7 @@ const AuthProvider = ({ children }) => {
   // state--
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error,seterror]=useState(null)
 
   // Register user--or-- create user-
   const registerUser = (email, password) => {
@@ -63,6 +64,8 @@ const AuthProvider = ({ children }) => {
     setUser,
     user,
     loading,
+    seterror,
+    error
   };
  return <AuthContex.Provider value={authinfo}>{children}</AuthContex.Provider>;
 
