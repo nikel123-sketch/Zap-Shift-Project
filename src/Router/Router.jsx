@@ -11,6 +11,7 @@ import Login from "../Pages/AuthPage/Login";
 import Register from "../Pages/AuthPage/Register";
 import PrivetRout from "./PrivetRout";
 import BeaRider from "../Pages/BeaRider/BeaRider";
+import SandParcel from "../Pages/SandParcel/SandParcel";
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
         // Component:BeaRider
         element:<PrivetRout><BeaRider></BeaRider></PrivetRout>
       },
+      {
+        path:'sandparcel',
+        element:<PrivetRout><SandParcel></SandParcel></PrivetRout>
+      }
     ],
   },
   {

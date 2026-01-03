@@ -11,14 +11,10 @@ const Register = () => {
   const navigate=useNavigate();
 
   const {
-    registerUser,
-    singUser,
-    singOut,
+    registerUser,    
     singInWithGoogle,
     setLoading,
     setUser,
-    user,
-    loading,
     updateprofie,
     seterror,
     error,

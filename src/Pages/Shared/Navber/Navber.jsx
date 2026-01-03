@@ -34,6 +34,9 @@ const Navber = () => {
         <NavLink to={"Pricing"}>Pricing</NavLink>
       </li>
       <li>
+        <NavLink to={"sandparcel"}>SandParcel</NavLink>
+      </li>
+      <li>
         <NavLink to={"BeaRider"}>Be a Rider</NavLink>
       </li>
     </>
