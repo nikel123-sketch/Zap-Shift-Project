@@ -1,41 +1,88 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
+import { useLoaderData } from "react-router";
 
 const SandParcel = () => {
+  // load data---
+  const servisecenter = useLoaderData();
+
+  // react hooks form--
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  
+  // sender region---------------
+  // region---
+  const regionsDuplicate = servisecenter.map((c) => c.region);
+  const regions = [...new Set(regionsDuplicate)];
+  // console.log(regions);
+
+  const senderRegion = useWatch( {control, name:"senderregion"});
+  console.log(senderRegion)
+
+  const recevierRegion = useWatch({ control, name: "recevierregion" });
+
+  // districtsbyregion---
+  const districtsbyregion = (region) => {
+    const regionDistricts = servisecenter.filter((c) => c.region === region);
+
+    const districts = regionDistricts.map((d) => d.district);
+    // console.log(districts)
+    return districts;
+  };
+
+
+
+  // formhendlesubmit----
   const formhendlesubmit = (data) => {
     console.log(data);
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6 ">
       <h1 className="text-3xl font-bold text-teal-700 mb-2">Send A Parcel</h1>
       <p className="text-gray-600 mb-6">Enter your parcel details</p>
 
       <form onSubmit={handleSubmit(formhendlesubmit)}>
         {/* Parcel Type */}
         <label className="font-medium block mb-2">Parcel Type</label>
-        <div className="flex items-center gap-6 mb-6">
+
+        <div className="flex items-center gap-6 mb-1">
+          {/* document type */}
           <label className="flex items-center gap-2">
-            <input type="radio" name="type" defaultChecked />
+            <input
+              type="radio"
+              value="document"
+              {...register("parcelType", {
+                required: true,
+              })}
+            />
             <span>Document</span>
           </label>
 
+          {/* not document type */}
           <label className="flex items-center gap-2">
-            <input type="radio" name="type" />
+            <input
+              type="radio"
+              value="not-document"
+              {...register("parcelType", {
+                required: true,
+              })}
+            />
             <span>Not-Document</span>
           </label>
         </div>
 
+        {/* {errors.parcelType?.type==='required'&&<p className="font-bold text-red-600">parcel type must be required</p>} */}
+
+        {/* ----------------- */}
+
         {/* Parcel Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-
-            
           {/* Parcel Name */}
           <div>
             <label className="font-medium block mb-1">Parcel Name</label>
@@ -73,9 +120,10 @@ const SandParcel = () => {
           </div>
         </div>
 
+        <div className="border-1 border-dotted w-full mt-5 mb-5"></div>
+
         {/* Sender & Receiver */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            
           {/* Sender */}
           <div>
             <h3 className="font-semibold mb-4">Sender Details</h3>
@@ -94,6 +142,23 @@ const SandParcel = () => {
                 {errors["sender-name"] && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors["sender-name"].message}
+                  </p>
+                )}
+              </div>
+
+              {/* sender email */}
+              <div>
+                <label className="font-medium block mb-1">Sender Email</label>
+                <input
+                  className="input input-bordered w-full"
+                  placeholder="Sender Email"
+                  {...register("sender-email", {
+                    required: "Sender email is required",
+                  })}
+                />
+                {errors["sender-email"] && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors["sender-email"].message}
                   </p>
                 )}
               </div>
@@ -134,27 +199,41 @@ const SandParcel = () => {
                 )}
               </div>
 
-              {/* Sender District */}
-              <div>
-                <label className="font-medium block mb-1">
-                  Sender District
-                </label>
+              {/* Sender region */}
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Sender Region</legend>
+
                 <select
-                  className="select select-bordered w-full"
-                  {...register("sender-district", {
-                    required: "Sender district is required",
-                  })}
+                  {...register("senderregion")}
+                  defaultValue="Pick a Region"
+                  className="select"
                 >
-                  <option value="">Select your District</option>
-                  <option>Dhaka</option>
-                  <option>Chattogram</option>
+                  <option disabled={true}>Pick a Region</option>
+                  {regions.map((r, index) => (
+                    <option key={index} value={r}>
+                      {r}
+                    </option>
+                  ))}
                 </select>
-                {errors["sender-district"] && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors["sender-district"].message}
-                  </p>
-                )}
-              </div>
+              </fieldset>
+
+              {/* Sender districts */}
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Sender Districts</legend>
+
+                <select
+                  {...register("senderdistrict")}
+                  defaultValue="Pick a district"
+                  className="select"
+                >
+                  <option disabled={true}>Pick a district</option>
+                  {districtsbyregion(senderRegion).map((r, index) => (
+                    <option key={index} value={r}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
+              </fieldset>
 
               {/* Pickup Instruction */}
               <div>
@@ -199,6 +278,23 @@ const SandParcel = () => {
                 )}
               </div>
 
+              {/* recevier email */}
+              <div>
+                <label className="font-medium block mb-1">Receiver Email</label>
+                <input
+                  className="input input-bordered w-full"
+                  placeholder="Receiver Email"
+                  {...register("receiver-email", {
+                    required: "Receiver email is required",
+                  })}
+                />
+                {errors["receiver-email"] && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors["receiver-email"].message}
+                  </p>
+                )}
+              </div>
+
               {/* Receiver Address */}
               <div>
                 <label className="font-medium block mb-1">
@@ -237,27 +333,41 @@ const SandParcel = () => {
                 )}
               </div>
 
-              {/* Receiver District */}
-              <div>
-                <label className="font-medium block mb-1">
-                  Receiver District
-                </label>
+              {/* recevier region */}
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Recevier Region</legend>
+
                 <select
-                  className="select select-bordered w-full"
-                  {...register("receiver-district", {
-                    required: "Receiver district is required",
-                  })}
+                  {...register("recevierregion")}
+                  defaultValue="Pick a Region"
+                  className="select"
                 >
-                  <option value="">Select your District</option>
-                  <option>Dhaka</option>
-                  <option>Rajshahi</option>
+                  <option disabled={true}>Pick a Region</option>
+                  {regions.map((r, index) => (
+                    <option key={index} value={r}>
+                      {r}
+                    </option>
+                  ))}
                 </select>
-                {errors["receiver-district"] && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors["receiver-district"].message}
-                  </p>
-                )}
-              </div>
+              </fieldset>
+
+              {/* Recevier districts */}
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Recevier Districts</legend>
+
+                <select
+                  {...register("recevierdistrict")}
+                  defaultValue="Pick a district"
+                  className="select"
+                >
+                  <option disabled={true}>Pick a district</option>
+                  {districtsbyregion(recevierRegion).map((r, index) => (
+                    <option key={index} value={r}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
+              </fieldset>
 
               {/* Delivery Instruction */}
               <div>

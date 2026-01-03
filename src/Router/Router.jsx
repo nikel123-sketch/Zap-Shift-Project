@@ -46,6 +46,7 @@ export const router = createBrowserRouter([
       },
       {
         path:'sandparcel',
+        loader:()=>fetch('/servicecenter.json').then(res=>res.json()),
         element:<PrivetRout><SandParcel></SandParcel></PrivetRout>
       }
     ],
