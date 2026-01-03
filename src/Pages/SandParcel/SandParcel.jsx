@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
+import Swal from "sweetalert2";
 
 const SandParcel = () => {
   // load data---
@@ -40,6 +41,49 @@ const SandParcel = () => {
   // formhendlesubmit----
   const formhendlesubmit = (data) => {
     console.log(data);
+    const isdocument = data.parcelType === "document";
+    const isSamedistrict = data.recevierdistrict === data.senderdistrict;
+    // console.log(samedistrict)
+
+    const percelweight = parseFloat(data.parcelweight);
+    let cost=0;
+    if(isdocument){
+      cost=isSamedistrict? 60:80;
+    }
+    else{
+      if(percelweight<3){
+        cost=isSamedistrict?110:150;
+      }
+      else{
+        const minCharge=isSamedistrict?110:150;
+        const extraweight=percelweight-3;
+
+        const extraCharge=isSamedistrict? extraweight+40:extraweight+40+40;
+
+        cost = minCharge+extraCharge;
+      }
+    }
+
+    console.log(cost)
+
+    Swal.fire({
+      title: "Agree with the cost?",
+      text: `You will be chargee ${cost} taka!`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "I Agree!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
+
   };
 
   return (
@@ -108,7 +152,7 @@ const SandParcel = () => {
               type="number"
               placeholder="Parcel Weight (KG)"
               className="input input-bordered w-full"
-              {...register("parcel-weight", {
+              {...register("parcelweight", {
                 required: "Parcel weight is required",
               })}
             />
