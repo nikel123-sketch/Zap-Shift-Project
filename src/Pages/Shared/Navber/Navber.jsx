@@ -39,6 +39,13 @@ const Navber = () => {
       <li>
         <NavLink to={"BeaRider"}>Be a Rider</NavLink>
       </li>
+      {user && (
+        <>
+          <li>
+            <NavLink to={"dashboard/myparcels"}>MyParcels</NavLink>
+          </li>
+        </>
+      )}
     </>
   );
   return (

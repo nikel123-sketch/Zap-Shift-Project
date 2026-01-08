@@ -2,8 +2,16 @@ import React from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import useAuth from "../../Hooks/useAuth";
 
 const SandParcel = () => {
+
+  // user--
+  const {user}=useAuth();
+
+  // axios--
+  const axiosSecure=useAxiosSecure();
   // load data---
   const servisecenter = useLoaderData();
 
@@ -65,6 +73,7 @@ const SandParcel = () => {
     }
 
     console.log(cost)
+    data.cost =cost;
 
     Swal.fire({
       title: "Agree with the cost?",
@@ -76,11 +85,19 @@ const SandParcel = () => {
       confirmButtonText: "I Agree!",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
+
+        // save the parcel info to the data base;
+        axiosSecure.post('/parcels',data)
+        .then(res=>{
+          console.log(res.data);
+          Swal.fire({
+            title: "sucessfully!",
+            text: "Your requset has been sucessfully.",
+            icon: "success",
+          });
+        })
+
+        
       }
     });
 
@@ -134,13 +151,13 @@ const SandParcel = () => {
               type="text"
               placeholder="Parcel Name"
               className="input input-bordered w-full"
-              {...register("parcel-name", {
+              {...register("parcelname", {
                 required: "Parcel name is required",
               })}
             />
             {errors["parcel-name"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors["parcel-name"].message}
+                {errors["parcelname"].message}
               </p>
             )}
           </div>
@@ -158,7 +175,7 @@ const SandParcel = () => {
             />
             {errors["parcel-weight"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors["parcel-weight"].message}
+                {errors["parcelweight"].message}
               </p>
             )}
           </div>
@@ -177,15 +194,17 @@ const SandParcel = () => {
               <div>
                 <label className="font-medium block mb-1">Sender Name</label>
                 <input
+                defaultValue={user?.displayName}
+                readOnly
                   className="input input-bordered w-full"
                   placeholder="Sender Name"
-                  {...register("sender-name", {
+                  {...register("sendername", {
                     required: "Sender name is required",
                   })}
                 />
                 {errors["sender-name"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors["sender-name"].message}
+                    {errors["sendername"].message}
                   </p>
                 )}
               </div>
@@ -194,15 +213,17 @@ const SandParcel = () => {
               <div>
                 <label className="font-medium block mb-1">Sender Email</label>
                 <input
+                  defaultValue={user?.email}
+                  readOnly
                   className="input input-bordered w-full"
                   placeholder="Sender Email"
-                  {...register("sender-email", {
+                  {...register("senderemail", {
                     required: "Sender email is required",
                   })}
                 />
                 {errors["sender-email"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors["sender-email"].message}
+                    {errors["senderemail"].message}
                   </p>
                 )}
               </div>
@@ -213,13 +234,13 @@ const SandParcel = () => {
                 <input
                   className="input input-bordered w-full"
                   placeholder="Address"
-                  {...register("sender-address", {
+                  {...register("senderaddress", {
                     required: "Sender address is required",
                   })}
                 />
                 {errors["sender-address"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors["sender-address"].message}
+                    {errors["senderaddress"].message}
                   </p>
                 )}
               </div>
@@ -232,13 +253,13 @@ const SandParcel = () => {
                 <input
                   className="input input-bordered w-full"
                   placeholder="Sender Phone No"
-                  {...register("sender-phone", {
+                  {...register("senderphone", {
                     required: "Sender phone number is required",
                   })}
                 />
                 {errors["sender-phone"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors["sender-phone"].message}
+                    {errors["senderphone"].message}
                   </p>
                 )}
               </div>
@@ -287,13 +308,13 @@ const SandParcel = () => {
                 <textarea
                   className="textarea textarea-bordered w-full"
                   placeholder="Pickup Instruction"
-                  {...register("pickup-instruction", {
+                  {...register("pickupinstruction", {
                     required: "Pickup instruction is required",
                   })}
                 />
                 {errors["pickup-instruction"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors["pickup-instruction"].message}
+                    {errors["pickupinstruction"].message}
                   </p>
                 )}
               </div>
@@ -311,13 +332,13 @@ const SandParcel = () => {
                 <input
                   className="input input-bordered w-full"
                   placeholder="Receiver Name"
-                  {...register("receiver-name", {
+                  {...register("receivername", {
                     required: "Receiver name is required",
                   })}
                 />
                 {errors["receiver-name"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors["receiver-name"].message}
+                    {errors["receivername"].message}
                   </p>
                 )}
               </div>
@@ -328,13 +349,13 @@ const SandParcel = () => {
                 <input
                   className="input input-bordered w-full"
                   placeholder="Receiver Email"
-                  {...register("receiver-email", {
+                  {...register("receiveremail", {
                     required: "Receiver email is required",
                   })}
                 />
                 {errors["receiver-email"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors["receiver-email"].message}
+                    {errors["receiveremail"].message}
                   </p>
                 )}
               </div>
@@ -347,13 +368,13 @@ const SandParcel = () => {
                 <input
                   className="input input-bordered w-full"
                   placeholder="Address"
-                  {...register("receiver-address", {
+                  {...register("receiveraddress", {
                     required: "Receiver address is required",
                   })}
                 />
                 {errors["receiver-address"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors["receiver-address"].message}
+                    {errors["receiveraddress"].message}
                   </p>
                 )}
               </div>
@@ -366,13 +387,13 @@ const SandParcel = () => {
                 <input
                   className="input input-bordered w-full"
                   placeholder="Receiver Contact No"
-                  {...register("receiver-phone", {
+                  {...register("receiverphone", {
                     required: "Receiver phone number is required",
                   })}
                 />
                 {errors["receiver-phone"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors["receiver-phone"].message}
+                    {errors["receiverphone"].message}
                   </p>
                 )}
               </div>
@@ -421,13 +442,13 @@ const SandParcel = () => {
                 <textarea
                   className="textarea textarea-bordered w-full"
                   placeholder="Delivery Instruction"
-                  {...register("delivery-instruction", {
+                  {...register("deliveryinstruction", {
                     required: "Delivery instruction is required",
                   })}
                 />
                 {errors["delivery-instruction"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors["delivery-instruction"].message}
+                    {errors["deliveryinstruction"].message}
                   </p>
                 )}
               </div>

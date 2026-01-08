@@ -12,6 +12,8 @@ import Register from "../Pages/AuthPage/Register";
 import PrivetRout from "./PrivetRout";
 import BeaRider from "../Pages/BeaRider/BeaRider";
 import SandParcel from "../Pages/SandParcel/SandParcel";
+import DasbordLayout from "../Layout/DasbordLayout/DasbordLayout";
+import MyParcels from "../Pages/MyParcels/MyParcels";
 
 export const router = createBrowserRouter([
   {
@@ -29,7 +31,7 @@ export const router = createBrowserRouter([
       {
         path: "Coverage",
         Component: Coverage,
-        loader:()=>fetch('/servicecenter.json').then(res=>res.json())
+        loader: () => fetch("/servicecenter.json").then((res) => res.json()),
       },
       {
         path: "AboutUs",
@@ -42,27 +44,49 @@ export const router = createBrowserRouter([
       {
         path: "BeaRider",
         // Component:BeaRider
-        element:<PrivetRout><BeaRider></BeaRider></PrivetRout>
+        element: (
+          <PrivetRout>
+            <BeaRider></BeaRider>
+          </PrivetRout>
+        ),
       },
       {
-        path:'sandparcel',
-        loader:()=>fetch('/servicecenter.json').then(res=>res.json()),
-        element:<PrivetRout><SandParcel></SandParcel></PrivetRout>
-      }
+        path: "sandparcel",
+        loader: () => fetch("/servicecenter.json").then((res) => res.json()),
+        element: (
+          <PrivetRout>
+            <SandParcel></SandParcel>
+          </PrivetRout>
+        ),
+      },
     ],
   },
   {
-    path:'/',
-    Component:AuthLayout,
-    children:[
+    path: "/",
+    Component: AuthLayout,
+    children: [
       {
-        path:'login',
-        Component:Login
+        path: "login",
+        Component: Login,
       },
       {
-        path:'register',
-        Component:Register
-      }
-    ]
-  }
+        path: "register",
+        Component: Register,
+      },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: (
+      <PrivetRout>
+        <DasbordLayout></DasbordLayout>
+      </PrivetRout>
+    ),
+    children: [
+      {
+        path: "myparcels",
+        Component: MyParcels,
+      },
+    ],
+  },
 ]);
