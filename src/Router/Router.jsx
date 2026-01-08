@@ -14,6 +14,7 @@ import BeaRider from "../Pages/BeaRider/BeaRider";
 import SandParcel from "../Pages/SandParcel/SandParcel";
 import DasbordLayout from "../Layout/DasbordLayout/DasbordLayout";
 import MyParcels from "../Pages/MyParcels/MyParcels";
+import Pay from "../Pages/Pay/Pay";
 
 export const router = createBrowserRouter([
   {
@@ -86,6 +87,10 @@ export const router = createBrowserRouter([
       {
         path: "myparcels",
         Component: MyParcels,
+      },
+      {
+        path: "pay/:parcelId",
+        Component: Pay,
       },
     ],
   },
